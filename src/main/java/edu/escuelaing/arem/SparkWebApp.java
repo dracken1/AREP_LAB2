@@ -1,29 +1,26 @@
 package edu.escuelaing.arem;
 
 import static spark.Spark.*;
+
+import spark.Request;
+import spark.Response;
 import spark.utils.IOUtils;
 
 
 public class SparkWebApp {
 
+    private static MyMeanStandardLinkedList list1 = new MyMeanStandardLinkedList();
+    private static double meanResult = 0.0;
+    private static double standardDResult = 0.0;
+
     public static void main(String[] args) {
         port(getPort());
         get("/hello", (req, res) -> "Hello Heroku");
 
-        String indexHTML = "<!DOCTYPE html>\n" +
-                "<html><head>\n" +
-                "      <title>Calculos Estadisticos</title>\n" +
-                "   </head><body>\n" +
-                "      <p><b>Calculo de Datos Estadisticos</b></p>\n" +
-                "      <h2>Mean and Standar Deviation Web App!</h2>\n" +
-                "      <p>Aplicación Web para calcular la media y la desviacion estandar de un conjunto de datos dados por el usuario.\n\n</p>\n" +
-                "      <p>\n\nClick the next link to start entering your data:</p>\n" +
-                "      <a href = \"/calcdata\" target = \"_self\">Enter Your Data</a>\n" +
-                "   </body></html>";
 
-        get("/index", (req, res) -> indexHTML);
-        /*get("/calcdata", (req, res) -> calcdataPage(req, res));
-        get("/results", (req, res) -> resultsPage(req,res));*/
+
+        get("/index", (req, res) -> indexpage(req,res));
+        get("/results", (req, res) -> resultsPage(req,res));
 
 
 
@@ -37,58 +34,47 @@ public class SparkWebApp {
         return 5000; //returns default port if heroku-port isn't set(i.e. on localhost)
     }
 
-
-
-
-    /*private static String calcdataPage(Request req, Response res){
-        String calcdataHTML = "<!DOCTYPE html>\n" +
+    public static String indexpage(Request req, Response res){
+        String indexHTML = "<!DOCTYPE html>\n" +
                 "<html><head>\n" +
-                "      <title>Calculos Estadisticos</title>\n" +
-                "   </head><body>\n" +
-                "      <p><b>Calculo de Datos Estadisticos</b></p>\n" +
-                "      <h2>Ingrese sus Datos a la Aplicacion:</h2>\n" +
-                "      <p>\n\nIngrese dos conjuntos de números que quiera calcular:</p>\n" +
-                "      <p>***Recuerde ingresar los numeros separados por espacios en blanco y con \".\" puntos decimales en caso de requerirlo.</p>\n" +
+                "      <title>mean and standardD</title>\n" +
+                "   </head><body>\n<h2>Mean and Standar Deviation</h2>\n" +
+                "      <p>Web application capable of calculating the mean and standard deviation of a set of numbers\n\n</p>\n" +
                 "       <form action=\"/results\">\n" +
-                "           Set #1 of Numbers:<br>\n" +
+                "           First set of Numbers:<br>\n" +
                 "           <input type=\"text\" placeholder=\"Separated by spaces\" name=\"inputData1\" ><br>\n" +
-                "           Set #2 of Numbers:<br>\n" +
-                "           <input type=\"text\" placeholder=\"Separated by spaces\" name=\"inputData2\" ><br><br>\n" +
                 "           <input type=\"submit\" value=\"Calculate!\">\n" +
-                "       </form>" +
-//"      <a href = \"http://localhost:9999/results\" target = \"_self\">Ver Resultados</a>\n" +
+                "       </form>"+
+                "       <a href = \"http://localhost:5000/results\" target = \"_self\">See Results</a>\n" +
                 "   </body></html>";
-        return calcdataHTML;
+        return indexHTML;
     }
 
-    *//*
+    public static void readInputLineSplittedBySpacesAndAddToList(String set, MyMeanStandardLinkedList list) {
+        for (String str : set.split(" ")) {
+            double doubletoadd = Double.parseDouble(str);
+            System.out.println("double: " + doubletoadd);
+            list.add(doubletoadd);
+        }
 
-     *//*
-    private static String resultsPage(Request req, Response res){
+
+        /*
+
+        */
+    }
+
+    public static String resultsPage(Request req, Response res){
         String set1 = req.queryParams("inputData1");
-        String set2 = req.queryParams("inputData2");
+        readInputLineSplittedBySpacesAndAddToList(set1,list1);
+        meanResult = list1.calcMean();
+        standardDResult = list1.calcStandard();
 
-        StatisCalcs calculator= new StatisCalcs();
-
-        set_1 = calculator.readInput(set1);
-        set_1_mean = calculator.media(set_1);
-        set_1_StdDev = calculator.desEstandar(set_1);
-
-        set_2 = calculator.readInput(set2);
-        set_2_mean = calculator.media(set_2);
-        set_2_StdDev = calculator.desEstandar(set_2);
-
-        System.out.println("SET 1:");
-        System.out.println("Mean: "+ set_1_mean);
-        System.out.println("Standar Deviation: "+ set_1_StdDev);
-
-        System.out.println("SET 2:");
-        System.out.println("Mean: "+ set_2_mean);
-        System.out.println("Standar Deviation: "+ set_2_StdDev);
+        System.out.println("Mean: "+ meanResult);
+        System.out.println("StandardD: "+ standardDResult);
 
         String resultsHTML = "<!DOCTYPE html>\n" +
                 "<html><head>\n" +
-                "      <title>Calculos Estadisticos</title>\n" +
+                "      <title>mean and standardD</title>\n" +
                 "   <style>" +
                 "       table, th, td {" +
                 "           border: 1px solid black;" +
@@ -111,24 +97,19 @@ public class SparkWebApp {
                 "           <tr>\n" +
                 "               <th>Results</th>\n" +
                 "               <th><b>Set #1</b></th> \n" +
-                "               <th><b>Set #2</b></th>\n" +
                 "           </tr>\n" +
                 "           <tr>\n" +
                 "               <td><b>Mean</b></td>\n" +
-                "               <td>" + set_1_mean + "</td> \n" +
-                "               <td>" + set_2_mean + "</td>\n" +
+                "               <td>" + meanResult + "</td> \n" +
                 "           </tr>\n" +
                 "           <tr>\n" +
                 "               <td><b>Standard Deviation</b></td>\n" +
-                "               <td>" + set_1_StdDev + "</td> \n" +
-                "               <td>" + set_2_StdDev + "</td>\n" +
+                "               <td>" + standardDResult + "</td> \n" +
                 "           </tr>\n" +
                 "       </table>" +
-                "   </body>\n" +
-                "	\n" +
-                "</html>";
+                "   </body></html>";
 
         return resultsHTML;
-    }*/
+    }
 }
 

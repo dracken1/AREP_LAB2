@@ -20,7 +20,7 @@
           <source>1.8</source>
           <target>1.8</target>
         </configuration>
-      </plugin>git@heroku.com:arcane-lowlands-8408.git
+      </plugin><!--git@heroku.com:arcane-lowlands-8408.git-->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
