@@ -1,5 +1,7 @@
 [![CircleCI](https://circleci.com/gh/circleci/AREP_LAB1.svg?style=svg)](https://circleci.com/gh/dracken1/AREP_LAB2/tree/master)
 
+!https://circleci.com/gh/CircleCI/AREP_LAB2.svg?style=svg!:https://circleci.com/gh/dracken1/AREP_LAB2/tree/master
+
 # Laboratorio 1 AREP
   Este repo fue desarrollado como laboratorio de la clase AREP de la Escuela Colombiana de Ingenieria Julio Garavito.
 
