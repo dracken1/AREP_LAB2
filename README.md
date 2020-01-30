@@ -60,10 +60,12 @@
         assertTrue( mean == 550.0 );
     }
   ```
-  - Se utilizo el framework spark para que la aplicacion quede corriendo en el puerto 5000 y se desplego en heroku para que esta puede ser accedida desde cualquier lugar. Ya que es una aplicacion web el ingreso de los datos para la linkedlist ahora se realiza por medio de la siquiente pagina: 
+- Se utilizo el framework spark para que la aplicacion quede corriendo en el puerto 5000 y se desplego en heroku para que esta puede ser accedida desde cualquier lugar. Ya que es una aplicacion web el ingreso de los datos para la linkedlist ahora se realiza por medio de la siquiente pagina: 
   
-  - Ejemplo
+- Ejemplo
+
   ![Imagenes](images/1.png)
+  
   ![Imagenes](images/2.png)
   
 # Getting Started
