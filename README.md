@@ -1,8 +1,6 @@
 [![CircleCI](https://circleci.com/gh/circleci/AREP_LAB1.svg?style=svg)](https://circleci.com/gh/dracken1/AREP_LAB2/tree/master)
 
-!https://circleci.com/gh/CircleCI/AREP_LAB2.svg?style=svg!:https://circleci.com/gh/dracken1/AREP_LAB2/tree/master
-
-# Laboratorio 1 AREP
+# Laboratorio 2 AREP
   Este repo fue desarrollado como laboratorio de la clase AREP de la Escuela Colombiana de Ingenieria Julio Garavito.
 
 - Se creo una Linkedlist propia de elementos tipo double que pudiera completar las siguientes operaciones:
@@ -62,6 +60,7 @@
         assertTrue( mean == 550.0 );
     }
   ```
+  - Se utilizo el framework spark para que la aplicacion quede corriendo en el puerto 5000 y se desplego en heroku para que esta puede ser accedida desde cualquier lugar. Ya que es una aplicacion web el ingreso de los datos para la linkedlist ahora se realiza por medio de la siquiente pagina: 
   
 # Getting Started
 ## Install with
