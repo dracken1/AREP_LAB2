@@ -3,70 +3,97 @@
 # Laboratorio 2 AREP
   Este repo fue desarrollado como laboratorio de la clase AREP de la Escuela Colombiana de Ingenieria Julio Garavito.
 
-- Se creo una Linkedlist propia de elementos tipo double que pudiera completar las siguientes operaciones:
+- Se resolvieron los siguientes ejercicios y retos:
 ````
-	1. adicionar
-  	2. remover
-  	3. calcular su tamaño
-  	4. saber si esta vacia
-  	5. calcular su media
-  	6. calcular su desviacion estandar
-	7. imprimirse en un formato comodo para el usuario
+EJERCICIO 1
+Escriba un programa en el cual usted cree un objeto URL e imprima en pantalla cada uno de los componentes de una URL. Es decir , debe usar los siguientes métodos: getProtocol, getAuthority, getHost, getPort, getPath, getQuery, getFile, getRef. Asegúrese que ninguno imprima una cadena vacía, esto implica que la URL que use para su objeto debe contener datos suficientes.
+
+EJERCICIO 2
+Escriba una aplicación browser que dada una URL lea datos de esa dirección y que los almacene en un archivo con el nombre resultado.html. Intente ver este archivo en el navegador. Su implementación debe ser un programa que reciba el parámetro de URL por medio de la línea de comandos.
+
+EJERCICIO 3
+Usando sockets escriba un servidor que reciba un número y responda el cuadrado de este número. Escriba un cliente para probarlo y envíele una secuencia de 20 números.
+
+RETO 1
+Escriba un servidor web que soporte múlltiples solicitudes seguidas (no concurrentes). El servidor debe retornar todos los archivos solicitados, incluyendo páginas html e imágenes. Construya un sitio web con javascript para probar su servidor. Despliegue su solución en Heroku.
 
 ````
 
 # Example
   ```
- // Insert the object o at the end of the list
-    public boolean add(double o) {
-        if(head.next == null && head.data == 0){
-            head.data = o;
-            total += o;
-            tail = head;
-            System.out.println("node: [ data: " + tail.data + ",prior: "+ tail.prior +"]");
-            head.index = size;
-            size++;
-            return true;
-        }else{
-            Node addo = new Node(o, tail);
-            tail.next = addo;
-            total += o;
-            tail = addo;
-            System.out.println("node: [ data: " + tail.data + ",prior: "+ tail.prior.data +"]");
-            tail.index = size;
-            size++;
-            return true;
-        }    
-  ```
-  
-- Adicionalmente se creo una prueba para cada operacion en una clase tipo Junit.
-  ```
-  @Test
-    public void shouldSolveMeanFirstColumn()
-    {
-        MyMeanStandardLinkedList list = new MyMeanStandardLinkedList();
-        list.add(160);
-        list.add(591);
-        list.add(114);
-        list.add(229);
-        list.add(230);
-        list.add(270);
-        list.add(128);
-        list.add(1657);
-        list.add(624);
-        list.add(1503);
-        double mean = list.calcMean();
+ package edu.escuelaing.arep;
 
-        assertTrue( mean == 550.0 );
+import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class FileTransferServer {
+
+    public final static int SOCKET_PORT = 36000;
+    public final static String FILE_TO_SEND = "src\\main\\java\\edu\\escuelaing\\arep\\resources\\descarga.jpg";
+    /*public final static String FILE_TO_SEND = "src\\main\\java\\edu\\escuelaing\\arep\\resources\\results.html";*/
+    public static void main (String [] args ) throws IOException {
+        FileInputStream fis = null;
+        BufferedInputStream bis = null;
+        OutputStream os = null;
+        ServerSocket servsock = null;
+        Socket sock = null;
+        PrintWriter out = null;
+        try {
+            servsock = new ServerSocket(SOCKET_PORT);
+            while (true) {
+                System.out.println("Waiting...");
+                try {
+                    sock = servsock.accept();
+                    System.out.println("Accepted connection : " + sock);
+                    out = new PrintWriter(
+                            sock.getOutputStream(), true);
+                    String outputLine = "HTTP/1.1 200 OK\r\n"
+                            + "Content-Type: text/html\r\n"
+                            + "\r\n"
+                            + "<!DOCTYPE html>\n"
+                            + "<html>\n"
+                            + "<head>\n"
+                            + "<meta charset=\"UTF-8\">\n"
+                            + "<title>browser</title>\n"
+                            + "<script>"
+                            + "alert(\"file received:"+ FILE_TO_SEND +"\");"
+                            + "</script>"
+                            + "</head>\n"
+                            + "<body>\n"
+                            + "</body>\n"
+                            + "</html>\n";
+                    System.out.println(outputLine);
+                    out.println(outputLine);
+                    // send file
+                    File myFile = new File (FILE_TO_SEND);
+                    byte [] mybytearray  = new byte [(int)myFile.length()];
+                    fis = new FileInputStream(myFile);
+                    bis = new BufferedInputStream(fis);
+                    bis.read(mybytearray,0,mybytearray.length);
+                    os = sock.getOutputStream();
+                    System.out.println("Sending " + FILE_TO_SEND + "(" + mybytearray.length + " bytes)");
+                    os.write(mybytearray,0,mybytearray.length);
+                    os.flush();
+                    System.out.println("Done.");
+                }
+                finally {
+                    if (bis != null) bis.close();
+                    if (os != null) os.close();
+                    if (sock!=null){
+                        sock.close();
+                        out.close();
+                    }
+                }
+            }
+        }
+        finally {
+            if (servsock != null) servsock.close();
+        }
     }
+}
   ```
-- Se utilizo el framework spark para que la aplicacion quede corriendo en el puerto 5000 y se desplego en heroku para que esta puede ser accedida desde cualquier lugar. Ya que es una aplicacion web el ingreso de los datos para la linkedlist ahora se realiza por medio de la siquiente pagina: 
-  
-- Ejemplo
-
-  ![Imagenes](images/1.png)
-  
-  ![Imagenes](images/2.png)
+    
   
 # Getting Started
 ## Install with
